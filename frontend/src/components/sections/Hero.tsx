@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback } from "react";
 import Image from "next/image";
 import { ArrowDownRight, ExternalLink } from "lucide-react";
 import { SITE } from "@/lib/constants";
@@ -159,8 +159,8 @@ export default function Hero() {
         
         {/* Core Statement */}
         <p className="font-body text-xs sm:text-sm text-ash leading-relaxed mb-3 max-w-xl px-2">
-          Architecting high-performance digital platforms (<span className="text-ivory font-medium">Swadesh</span>, <span className="text-ivory font-medium">Fixora</span>) and exploring
-          applied machine learning systems (<span className="text-ivory font-medium">MediNexus AI</span>) with clean type safety and
+          Architecting high-performance web platforms (<span className="text-ivory font-medium">Fixora</span>) and engineering
+          applied machine learning systems (<span className="text-ivory font-medium">MediNexus AI</span>, <span className="text-ivory font-medium">DairyMitra-AI</span>) with clean type safety and
           cinematic spatial design.
         </p>
 

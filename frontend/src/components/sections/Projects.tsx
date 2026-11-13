@@ -20,6 +20,9 @@ export default function Projects() {
       ? PROJECTS_DATA
       : PROJECTS_DATA.filter((p) => p.category === activeCategory);
 
+  const flagship = filteredProjects[0];
+  const secondary = filteredProjects.slice(1);
+
   const getCategoryIcon = (category: Project["category"]) => {
     switch (category) {
       case "ai":
@@ -95,8 +98,8 @@ export default function Projects() {
 
         {/* Projects Showcase — Asymmetrical Editorial Layout */}
         <div className="space-y-10">
-          {/* 1. Flagship Showcase: Swadesh (when included in filter) */}
-          {filteredProjects.find((p) => p.id === "swadesh") && (
+          {/* 1. Flagship Showcase */}
+          {flagship && (
             <article className="card p-7 md:p-10 relative overflow-hidden group transition-all duration-500 hover:border-crimson/40 hover:shadow-[0_25px_60px_-15px_rgba(220,38,38,0.2)]">
               {/* Volumetric background glow */}
               <div
@@ -111,11 +114,11 @@ export default function Projects() {
                   <div className="flex flex-wrap items-center gap-3">
                     <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono bg-crimson/15 border border-crimson/30 text-crimson font-medium">
                       <Sparkles className="w-3.5 h-3.5 text-crimson" />
-                      <span>Flagship Production Platform</span>
+                      <span>Flagship Engineering Platform</span>
                     </span>
                     <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-mono bg-emerald-500/10 border border-emerald-500/25 text-emerald-400">
                       <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
-                      <span>Live on Vercel</span>
+                      <span>Production Ready</span>
                     </span>
                   </div>
 
@@ -124,44 +127,36 @@ export default function Projects() {
                       Platform 01
                     </span>
                     <h3 className="font-display text-3xl sm:text-4xl md:text-5xl font-extrabold text-ivory tracking-tight mb-2">
-                      Swadesh
+                      {flagship.title}
                     </h3>
-                    <p className="font-display text-base sm:text-lg text-amber-warm font-medium">
-                      Indian Culture, Crafts & Regional Heritage Platform
-                    </p>
+                    {flagship.tagline && (
+                      <p className="font-display text-base sm:text-lg text-amber-warm font-medium">
+                        {flagship.tagline}
+                      </p>
+                    )}
                   </div>
 
                   <p className="font-body text-base text-ash leading-relaxed">
-                    A digital platform built to spotlight authentic Indian heritage,
-                    cultural diversity, and local indigenous artisans, connecting regional creators
-                    with an appreciative digital audience.
+                    {flagship.description}
                   </p>
 
                   {/* Highlights */}
-                  <div className="space-y-2 p-4 rounded-xl bg-white/[0.02] border border-white/[0.05]">
-                    <div className="flex items-start gap-2.5">
-                      <CheckCircle2 className="w-4 h-4 text-crimson shrink-0 mt-0.5" />
-                      <span className="font-body text-xs sm:text-sm text-silver">
-                        Modern editorial interface celebrating Indian culture and regional artisan crafts
-                      </span>
+                  {flagship.highlights && flagship.highlights.length > 0 && (
+                    <div className="space-y-2 p-4 rounded-xl bg-white/[0.02] border border-white/[0.05]">
+                      {flagship.highlights.map((highlight, idx) => (
+                        <div key={idx} className="flex items-start gap-2.5">
+                          <CheckCircle2 className="w-4 h-4 text-crimson shrink-0 mt-0.5" />
+                          <span className="font-body text-xs sm:text-sm text-silver">
+                            {highlight}
+                          </span>
+                        </div>
+                      ))}
                     </div>
-                    <div className="flex items-start gap-2.5">
-                      <CheckCircle2 className="w-4 h-4 text-crimson shrink-0 mt-0.5" />
-                      <span className="font-body text-xs sm:text-sm text-silver">
-                        Fast page loads and responsive cross-device layout deployed on Vercel
-                      </span>
-                    </div>
-                    <div className="flex items-start gap-2.5">
-                      <CheckCircle2 className="w-4 h-4 text-crimson shrink-0 mt-0.5" />
-                      <span className="font-body text-xs sm:text-sm text-silver">
-                        Interactive cultural guides and rich multimedia exploration
-                      </span>
-                    </div>
-                  </div>
+                  )}
 
                   {/* Tech stack */}
                   <div className="flex flex-wrap gap-2 pt-1">
-                    {["React", "Next.js", "TypeScript", "Tailwind CSS", "Vercel"].map((t) => (
+                    {flagship.techStack.map((t) => (
                       <span
                         key={t}
                         className="px-3 py-1 rounded-lg bg-void/80 border border-white/[0.08] text-steel text-xs font-mono font-medium"
@@ -173,27 +168,31 @@ export default function Projects() {
 
                   {/* CTAs */}
                   <div className="flex flex-wrap gap-4 pt-4 border-t border-white/[0.06]">
-                    <a
-                      href="https://swadeshindia.vercel.app/"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-crimson text-ivory font-body font-semibold text-sm transition-all duration-300 hover:bg-blaze hover:shadow-[0_0_25px_rgba(220,38,38,0.4)]"
-                    >
-                      <ExternalLink className="w-4 h-4" />
-                      <span>Open Live Platform</span>
-                    </a>
+                    {flagship.liveUrl && flagship.liveUrl !== flagship.repoUrl && (
+                      <a
+                        href={flagship.liveUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-crimson text-ivory font-body font-semibold text-sm transition-all duration-300 hover:bg-blaze hover:shadow-[0_0_25px_rgba(220,38,38,0.4)]"
+                      >
+                        <ExternalLink className="w-4 h-4" />
+                        <span>Open Live Platform</span>
+                      </a>
+                    )}
 
-                    <a
-                      href="https://github.com/Rishabh-Dubey56"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 px-5 py-3 rounded-xl border border-white/[0.1] bg-white/[0.02] text-ash hover:text-ivory hover:border-white/[0.2] transition-colors text-xs font-mono"
-                    >
-                      <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24" aria-hidden="true">
-                        <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
-                      </svg>
-                      <span>Repository</span>
-                    </a>
+                    {flagship.repoUrl && (
+                      <a
+                        href={flagship.repoUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 px-5 py-3 rounded-xl border border-white/[0.1] bg-white/[0.02] text-ash hover:text-ivory hover:border-white/[0.2] transition-colors text-xs font-mono"
+                      >
+                        <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24" aria-hidden="true">
+                          <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
+                        </svg>
+                        <span>Architecture / Repository</span>
+                      </a>
+                    )}
                   </div>
                 </div>
 
@@ -208,7 +207,7 @@ export default function Projects() {
                         <span className="w-2.5 h-2.5 rounded-full bg-emerald-500/70" />
                       </div>
                       <div className="flex-1 mx-2 px-3 py-1 rounded-md bg-void/60 border border-white/[0.05] text-[10px] font-mono text-steel truncate">
-                        https://swadeshindia.vercel.app
+                        github.com/Rishabh-Dubey56
                       </div>
                     </div>
 
@@ -216,26 +215,26 @@ export default function Projects() {
                     <div className="space-y-3.5">
                       <div className="h-28 rounded-xl bg-gradient-to-r from-ember/30 via-smoke to-charcoal border border-white/[0.04] p-4 flex flex-col justify-end">
                         <span className="font-mono text-[10px] text-amber-warm uppercase tracking-widest">
-                          Artisan Heritage Showcase
+                          {flagship.category === "ai" ? "Intelligent AI Engine" : "Full-Stack System"}
                         </span>
                         <span className="font-display text-lg font-bold text-ivory">
-                          Swadesh India
+                          {flagship.title}
                         </span>
                       </div>
 
                       <div className="grid grid-cols-2 gap-2.5">
                         <div className="p-3 rounded-lg bg-white/[0.02] border border-white/[0.04]">
-                          <span className="font-mono text-[9px] text-steel uppercase block mb-1">Regional Crafts</span>
-                          <span className="font-body text-xs text-silver font-medium">Textiles & Pottery</span>
+                          <span className="font-mono text-[9px] text-steel uppercase block mb-1">Architecture</span>
+                          <span className="font-body text-xs text-silver font-medium">Type-Safe Clean Code</span>
                         </div>
                         <div className="p-3 rounded-lg bg-white/[0.02] border border-white/[0.04]">
-                          <span className="font-mono text-[9px] text-steel uppercase block mb-1">Architecture</span>
-                          <span className="font-body text-xs text-silver font-medium">Next.js & Vercel</span>
+                          <span className="font-mono text-[9px] text-steel uppercase block mb-1">Stack</span>
+                          <span className="font-body text-xs text-silver font-medium">{flagship.techStack.slice(0, 2).join(" · ")}</span>
                         </div>
                       </div>
 
                       <div className="p-3 rounded-lg bg-crimson/5 border border-crimson/15 flex items-center justify-between">
-                        <span className="font-mono text-[11px] text-silver">Status: Deployed & Active</span>
+                        <span className="font-mono text-[11px] text-silver">Status: Active Development</span>
                         <ExternalLink className="w-3.5 h-3.5 text-crimson" />
                       </div>
                     </div>
@@ -245,11 +244,10 @@ export default function Projects() {
             </article>
           )}
 
-          {/* 2. Secondary Systems Grid (Fixora, MediNexus AI, WikiClub Tech UU) */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredProjects
-              .filter((p) => p.id !== "swadesh")
-              .map((project) => (
+          {/* 2. Secondary Systems Grid */}
+          {secondary.length > 0 && (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {secondary.map((project) => (
                 <article
                   key={project.id}
                   className="card p-6 md:p-7 flex flex-col justify-between group transition-all duration-500 hover:border-amber-warm/35 hover:-translate-y-1 hover:shadow-[0_15px_40px_-10px_rgba(217,119,6,0.15)]"
@@ -347,7 +345,8 @@ export default function Projects() {
                   </div>
                 </article>
               ))}
-          </div>
+            </div>
+          )}
         </div>
       </div>
     </section>
