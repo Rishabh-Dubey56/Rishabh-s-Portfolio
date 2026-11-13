@@ -1,9 +1,15 @@
 "use client";
 
-import { useRef, useMemo, useEffect, useState } from "react";
+import { useRef, useMemo, useSyncExternalStore } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
 import { usePortfolioStore } from "@/stores/usePortfolioStore";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
+
+function seededRandom(seed: number) {
+  const x = Math.sin(seed) * 10000;
+  return x - Math.floor(x);
+}
 
 /**
  * Continuous 3D Camera & Scene Choreography
@@ -298,11 +304,11 @@ function ParticleNebula({ count = 260 }: { count?: number }) {
     const metallic = new THREE.Color("#d1d5db");
 
     for (let i = 0; i < count; i++) {
-      pos[i * 3] = (Math.random() - 0.5) * 22;
-      pos[i * 3 + 1] = (Math.random() - 0.5) * 18;
-      pos[i * 3 + 2] = (Math.random() - 0.5) * 16;
+      pos[i * 3] = (seededRandom(i * 3 + 1) - 0.5) * 22;
+      pos[i * 3 + 1] = (seededRandom(i * 3 + 2) - 0.5) * 18;
+      pos[i * 3 + 2] = (seededRandom(i * 3 + 3) - 0.5) * 16;
 
-      const pick = Math.random();
+      const pick = seededRandom(i * 3 + 4);
       const chosen = pick < 0.44 ? crimson : pick < 0.78 ? amber : metallic;
       col[i * 3] = chosen.r;
       col[i * 3 + 1] = chosen.g;
@@ -348,6 +354,7 @@ function ParticleNebula({ count = 260 }: { count?: number }) {
 /**
  * Camera Rig interpolating smoothly to scroll choreography + pointer parallax
  */
+/* eslint-disable react-hooks/immutability */
 function CameraRig() {
   const { camera, pointer } = useThree();
   const scrollProgress = usePortfolioStore((s) => s.scrollProgress);
@@ -377,6 +384,7 @@ function CameraRig() {
 
   return null;
 }
+/* eslint-enable react-hooks/immutability */
 
 /**
  * Dynamic Atmospheric Dual Rim Lighting
@@ -442,22 +450,15 @@ function CinematicLighting() {
  */
 export default function Scene() {
   const setIsCanvasReady = usePortfolioStore((s) => s.setIsCanvasReady);
-  const [canRender, setCanRender] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
+  const isReducedMotion = useMediaQuery("(prefers-reduced-motion: reduce)");
+  const isMobile = useMediaQuery("(max-width: 767px)");
+  const isClient = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false
+  );
 
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const prefersReducedMotion = window.matchMedia(
-        "(prefers-reduced-motion: reduce)"
-      ).matches;
-      if (!prefersReducedMotion) {
-        setCanRender(true);
-      }
-      setIsMobile(window.innerWidth < 768);
-    }
-  }, []);
-
-  if (!canRender) return null;
+  if (!isClient || isReducedMotion) return null;
 
   return (
     <div

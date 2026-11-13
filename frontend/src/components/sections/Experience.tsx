@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Briefcase, Calendar, CheckCircle2, ChevronRight, Sparkles } from "lucide-react";
+import { Briefcase, Calendar, ChevronRight } from "lucide-react";
 import { EXPERIENCES_DATA } from "@/lib/constants";
 
 export default function Experience() {

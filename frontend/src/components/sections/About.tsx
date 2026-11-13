@@ -3,7 +3,6 @@
 import { useState } from "react";
 import Image from "next/image";
 import {
-  Code2,
   Cpu,
   Database,
   GraduationCap,

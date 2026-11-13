@@ -1,39 +1,29 @@
 # Rishabh Dubey — Cinematic 3D Portfolio
 
-A premium, cinematic portfolio built with modern web technologies featuring scroll-driven 3D storytelling, real-time lighting shaders, interactive particle dynamics, and a robust Express + TypeScript backend.
+A premium, cinematic personal portfolio built with Next.js 16, Three.js / React Three Fiber, Tailwind CSS v4, GSAP ScrollTrigger, and EmailJS. Designed as a performant, frontend-only architecture optimized for zero-maintenance deployment on Vercel or any modern hosting platform.
 
 ---
 
 ## ✨ Features
 
 - **Cinematic 3D Visuals**: Three.js & React Three Fiber dynamic particles, cursor-interactive nebula shaders, and smooth camera choreography.
-- **Scroll Storytelling**: GSAP ScrollTrigger timeline orchestration paired with Lenis smooth scrolling.
+- **Scroll Storytelling**: GSAP ScrollTrigger timeline orchestration paired with responsive spatial depth.
 - **Modular Component Architecture**: Next.js 16 App Router with Tailwind CSS v4 styling.
-- **Full-Stack Backend**: Express 5 + TypeScript API with PostgreSQL (Prisma ORM), rate-limiting, and security headers (Helmet).
-- **Interactive Contact & Dispatch**: Contact endpoint with nodemailer SMTP integration and automatic port-fallback client.
-- **Verified Milestones & Showcase**: Highlighting real projects (Swadesh, Fixora, MediNexus AI, WikiClub Tech UU) and academic leadership.
+- **Direct Client-Side Contact**: Direct email dispatch via EmailJS (`dubeyrishabh997@gmail.com`) with spam honeypot and client-side validation.
+- **Genuine Engineering Milestones**: Highlighting verified systems (Fixora / KaamSetu, MediNexus AI, DairyMitra-AI / GAUVANTA, WikiClub Tech UU) and IBM curriculum honors at United University, Prayagraj.
 
 ---
 
 ## 🛠 Tech Stack
 
-### Frontend
 - **Next.js 16** (App Router, TypeScript)
-- **Tailwind CSS v4** (CSS-first configuration)
+- **Tailwind CSS v4** (CSS-first configuration with `@tailwindcss/postcss`)
 - **Three.js** + React Three Fiber + Drei (3D scenes & WebGL shaders)
 - **GSAP** + ScrollTrigger (scroll-linked choreography)
 - **Framer Motion** (micro-interactions & transitions)
-- **Lenis** (buttery smooth scrolling)
 - **Zustand** (lightweight state management)
+- **EmailJS** (`@emailjs/browser` for direct email delivery)
 - **Lucide React** (icons)
-
-### Backend
-- **Node.js** + Express 5 (TypeScript)
-- **PostgreSQL** + Prisma ORM
-- **JWT** authentication (admin dashboard)
-- **Zod** (strict schema validation)
-- **Helmet** + Express Rate Limit (security)
-- **Nodemailer** (automated email dispatch)
 
 ---
 
@@ -42,116 +32,82 @@ A premium, cinematic portfolio built with modern web technologies featuring scro
 ### Prerequisites
 - **Node.js** ≥ 20.x
 - **npm** ≥ 10.x
-- **PostgreSQL** (optional for local DB: Neon, Supabase, Railway, or local PostgreSQL instance)
 
 ---
 
-### 1. Frontend Setup
+### Setup & Development
 
 ```bash
 cd frontend
-cp .env.example .env.local    # Configure environment variables
-npm install                    # Install dependencies
-npm run dev                    # Starts on http://localhost:3000
+
+# 1. Configure environment variables (EmailJS)
+cp .env.example .env.local
+
+# 2. Install dependencies
+npm install
+
+# 3. Start development server
+npm run dev     # Starts on http://localhost:3000
 ```
 
-To build for production:
+### Production Build
+
 ```bash
-npm run build
-npm run start
+npm run build   # Compiles optimized production bundle via Turbopack
+npm run start   # Runs production server locally
 ```
 
 ---
 
-### 2. Backend Setup
+## 📧 EmailJS Setup (Direct Email Contact)
 
-```bash
-cd backend
-cp .env.example .env           # Configure DATABASE_URL and JWT_SECRET
-npm install                    # Install dependencies
-npm run dev                    # Starts on http://localhost:3001
-```
+To enable live email delivery to your inbox from the contact form:
 
-To build for production:
-```bash
-npm run build
-npm run start
-```
+1. Sign up for a free account at [EmailJS](https://www.emailjs.com/).
+2. Create an **Email Service** (e.g., connect your Gmail account). Copy your **Service ID**.
+3. Create an **Email Template** with the following template fields:
+   - `{{from_name}}` — Sender's name
+   - `{{from_email}}` — Sender's email
+   - `{{subject}}` — Message subject
+   - `{{message}}` — Message content
+   Set the recipient email in the template settings to `dubeyrishabh997@gmail.com`.
+   Copy your **Template ID**.
+4. Go to **Account > API Keys** and copy your **Public Key**.
+5. Add these values to `frontend/.env.local`:
+   ```bash
+   NEXT_PUBLIC_EMAILJS_SERVICE_ID=your_service_id
+   NEXT_PUBLIC_EMAILJS_TEMPLATE_ID=your_template_id
+   NEXT_PUBLIC_EMAILJS_PUBLIC_KEY=your_public_key
+   ```
 
----
-
-### 3. Database & Seeding (PostgreSQL)
-
-```bash
-cd backend
-
-# After configuring DATABASE_URL in backend/.env:
-npm run db:push               # Push Prisma schema to your PostgreSQL database
-npm run db:seed               # Seed initial projects, experiences, and achievements
-npm run db:test               # Test database connectivity
-npm run db:studio             # Launch visual Prisma Studio browser
-```
+*Note: In development / preview mode without credentials configured, the contact form operates in a safe simulated mode.*
 
 ---
 
 ## 📁 Project Structure
 
 ```
-portfolio1/
-├── frontend/                  # Next.js 16 App Router frontend
-│   ├── public/
-│   │   ├── images/            # Static image assets (hero portrait, icons, projects)
-│   │   ├── models/            # 3D models (.glb)
-│   │   └── textures/          # Matcaps, HDRI, noise textures
-│   └── src/
-│       ├── app/               # Next.js pages, layout & metadata
-│       ├── components/
-│       │   ├── canvas/        # Three.js / R3F dynamic particle scenes
-│       │   ├── sections/      # Hero, About, Projects, Experience, Achievements, Contact
-│       │   └── ui/            # Buttons, badges, and shared primitives
-│       ├── hooks/             # Custom React hooks (GPU detection, smooth scroll)
-│       ├── lib/               # Constants, API client, verified data stores
-│       ├── stores/            # Zustand global state stores
-│       └── types/             # Shared TypeScript types
-│
-├── backend/                   # Express 5 + TypeScript API
-│   ├── prisma/
-│   │   ├── schema.prisma      # Prisma schema (Project, Experience, Achievement, Message)
-│   │   └── seed.ts            # Database seeder script
-│   └── src/
-│       ├── index.ts           # Express server initialization
-│       ├── lib/               # Prisma singleton client
-│       ├── middleware/        # Authentication, validation, and rate limiters
-│       ├── routes/            # Projects, Experience, Achievements, Auth, Contact, Health
-│       ├── services/          # Mail service & OTP verification
-│       └── test-db.ts         # Database connection verification utility
-│
-└── .gitignore                 # Root gitignore protecting secrets & build artifacts
+frontend/
+├── public/
+│   ├── images/              # Authentic portrait assets & icons
+│   └── models/              # 3D assets
+└── src/
+    ├── app/                 # Next.js App Router (layout, page, preview, styles)
+    ├── components/
+    │   ├── canvas/          # Three.js / R3F dynamic particle scenes & camera rig
+    │   ├── sections/        # Hero, About, Projects, Experience, Achievements, Contact
+    │   ├── Navbar.tsx       # Navigation header & mobile menu
+    │   └── Footer.tsx       # Site footer
+    ├── data/                # Static typed portfolio datasets
+    │   ├── projects.ts      # Fixora, MediNexus AI, DairyMitra-AI, WikiClub Tech UU
+    │   ├── experience.ts    # Career milestones & leadership
+    │   ├── achievements.ts  # Academic & technical honors
+    │   └── skills.ts        # Categorized skill matrix & education
+    ├── hooks/               # Custom hooks (media query, scroll progress)
+    ├── lib/                 # EmailJS client & site constants
+    ├── stores/              # Zustand global state store
+    └── types/               # TypeScript interfaces
 ```
-
----
-
-## 📜 Available Scripts
-
-### Frontend (`cd frontend`)
-| Command | Description |
-|---|---|
-| `npm run dev` | Start development server with Turbopack |
-| `npm run build` | Compile optimized production build |
-| `npm run start` | Run production server |
-| `npm run lint` | Run ESLint checks |
-
-### Backend (`cd backend`)
-| Command | Description |
-|---|---|
-| `npm run dev` | Start development server with hot reload (`tsx`) |
-| `npm run build` | Compile TypeScript (`dist/`) |
-| `npm run start` | Run compiled production server |
-| `npm run db:push` | Push schema changes to PostgreSQL database |
-| `npm run db:migrate` | Run Prisma migrations |
-| `npm run db:seed` | Seed database with initial portfolio data |
-| `npm run db:test` | Test database connectivity via Prisma |
-| `npm run db:studio` | Open interactive Prisma Studio in browser |
 
 ---
 
@@ -161,4 +117,4 @@ portfolio1/
 - GitHub: [@Rishabh-Dubey56](https://github.com/Rishabh-Dubey56)
 - LinkedIn: [Rishabh Dubey](https://linkedin.com/in/rishabh-dubey-6b0a95321)
 - Email: dubeyrishabh997@gmail.com
-- Institution: United University, Prayagraj — B.Tech CSE (IBM)
+- Affiliation: United University, Prayagraj — B.Tech CSE (IBM), 2024–2028
